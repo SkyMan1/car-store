@@ -15,14 +15,14 @@ class CarstoreService {
             price: 3600
         },
         {
-            id: 1,
+            id: 3,
             brand: "Volvo",
             model: "XC60",
             year: 2017,
             price: 6000
         },
         {
-            id: 1,
+            id: 4,
             brand: "Honda",
             model: "CRV",
             year: 2018,
