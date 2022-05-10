@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import store from './store';
-import { Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
+
 import App from './components/app/app';
 import ErrorBoundry from './components/error-boundry/error-boundry';
 import CarstoreService from "./services/carstore-service.js"
@@ -16,8 +17,10 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <ErrorBoundry>
-        <CarstoreServiceProvider carstoreService={carstoreService}>
-          <App />
+        <CarstoreServiceProvider value={carstoreService}>
+          <Router>
+            <App />
+          </Router>
         </CarstoreServiceProvider>
       </ErrorBoundry>
     </Provider>
