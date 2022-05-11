@@ -2,8 +2,10 @@ import React from "react";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import CarstoreService from "../../services/carstore-service";
-import { carLoaded, carRequested } from "../../actions";
+import { carLoaded, carRequested, carLoadedError,carAddedToCart } from "../../actions";
 import withCarstoreService from "../hoc"
+import Spinner from "../spinner"
+import ErrorIndicator from "../error-indicator"
 
 
 class CarList extends React.Component {
@@ -12,17 +14,27 @@ class CarList extends React.Component {
         const { carstoreService, carLoaded, carRequested } = this.props
         carRequested();
         carstoreService.getCars()
-             .then((data) => { carLoaded(data) });
+             .then((data) => { carLoaded(data) })
+             .catch( (error)=>{ carLoadedError(error) })
     }
 
     render() {
-        const { carList } = this.props;
-        console.log(carList)
+        const { carList, loading, error, addToCart } = this.props;
+        
+        if(loading){
+            return <Spinner/>
+        }
+        
+        if(error){
+            return <ErrorIndicator/>
+        }
+
         return (
             <ul>
                 {
                     carList.map( (car)=>{
-                        return <li key={car.id}>{car.brand} - {car.model}. {car.price}$</li>
+                        return <li key={car.id}>{car.brand} - {car.model}. {car.price}$ <button className="btn btn-info add-to-cart"
+                        onClick={()=>addToCart(car.id)}>Add to cart</button></li>
                     })
                 }
             </ul>
@@ -32,13 +44,17 @@ class CarList extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        carList: state.carList
+        carList: state.carList,
+        loading: state.loading,
+        error: state.error
     }
 }
 
 const mapDispatchToProps = {
     carLoaded,
-    carRequested
+    carRequested,
+    carLoadedError,
+    addToCart: carAddedToCart
 }
 
 export default compose(withCarstoreService(), connect(mapStateToProps, mapDispatchToProps))(CarList)
