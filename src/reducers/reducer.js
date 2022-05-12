@@ -5,7 +5,8 @@ const initialState = {
     cart: [],
     loading: true,
     error: null,
-    carts: []
+    carts: [],
+    orderTotal: null
 }
 
 const updateCartItem = (car, carItem = {}, quont) => {
@@ -53,12 +54,14 @@ const updateCartItems = (state, newItem, carIdx) => {
 
 }
 
+const updateOrderTotal = (state, newItem) => {
+    console.log(state.carts);
+}
 
 const updateShopCart = (state, carId, quont) => {
     const car = state.carList.find((el) => el.id === carId);
     const carIdx = state.carts.findIndex((el) => el.id === carId);
     const carItem = state.carts[carIdx];
-
     const newItem = updateCartItem(car, carItem, quont);
 
     return updateCartItems(state, newItem, carIdx);
@@ -96,24 +99,27 @@ const reducer = (state = initialState, action) => {
             {
                 return {
                     ...state,
-                    carts: updateShopCart(state, action.payload, 1)
+                    carts: updateShopCart(state, action.payload, 1),
+                    orderTotal: updateOrderTotal(state, )
                 }
             }
         case "CAR_REMOVED_FROM_CART":
             {
                 return {
                     ...state,
-                    carts: updateShopCart(state, action.payload, -1)
+                    carts: updateShopCart(state, action.payload, -1),
+                    orderTotal: null
                 }
             }
         case "ALL_CAR_REMOVED_FROM_CART":
             {
-                const car = state.carts.find( (el)=>el.id === action.payload );
+                const car = state.carts.find((el) => el.id === action.payload);
                 const carCount = car.count;
                 console.log(carCount)
                 return {
                     ...state,
-                    carts: updateShopCart(state, action.payload, -1*carCount)
+                    carts: updateShopCart(state, action.payload, -1 * carCount),
+                    orderTotal: null
                 }
             }
         default: {
