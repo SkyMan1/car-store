@@ -79,9 +79,9 @@ const CartTableContainer = ({ carts, onDecrement, onIncrement, onDelete }) => {
 }
 
 
-const mapStateToProps = (state) => {
+const mapStateToProps = ({cart: { cartList }}) => {
     return {
-        carts: state.carts
+        carts: cartList
     }
 }
 

@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import CarstoreService from "../../services/carstore-service";
-import { carLoaded, carRequested, carLoadedError,carAddedToCart } from "../../actions";
+import { carLoaded, carRequested, carLoadedError, carAddedToCart } from "../../actions";
 import withCarstoreService from "../hoc"
 import Spinner from "../spinner"
 import ErrorIndicator from "../error-indicator"
@@ -14,27 +14,27 @@ class CarList extends React.Component {
         const { carstoreService, carLoaded, carRequested } = this.props
         carRequested();
         carstoreService.getCars()
-             .then((data) => { carLoaded(data) })
-             .catch( (error)=>{ carLoadedError(error) })
+            .then((data) => { carLoaded(data) })
+            .catch((error) => { carLoadedError(error) })
     }
 
     render() {
         const { carList, loading, error, addToCart } = this.props;
-        
-        if(loading){
-            return <Spinner/>
+
+        if (loading) {
+            return <Spinner />
         }
-        
-        if(error){
-            return <ErrorIndicator/>
+
+        if (error) {
+            return <ErrorIndicator />
         }
 
         return (
             <ul>
                 {
-                    carList.map( (car)=>{
+                    carList.map((car) => {
                         return <li key={car.id}>{car.brand} - {car.model}. {car.price}$ <button className="btn btn-info add-to-cart"
-                        onClick={()=>addToCart(car.id)}>Add to cart</button></li>
+                            onClick={() => addToCart(car.id)}>Add to cart</button></li>
                     })
                 }
             </ul>
@@ -42,11 +42,11 @@ class CarList extends React.Component {
     }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = ({ cars }) => {
     return {
-        carList: state.carList,
-        loading: state.loading,
-        error: state.error
+        carList: cars.carsList,
+        loading: cars.loading,
+        error: cars.error
     }
 }
 
